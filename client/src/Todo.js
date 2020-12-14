@@ -1,15 +1,17 @@
 const { Checkbox, Button, Header } = require("semantic-ui-react");
 
-const Todo = ({ id, name, complete }) => {
+const Todo = ({ id, name, complete, deleteTodo, updateTodo }) => {
   return (
     <div style={styles.flex}>
       <div style={styles.flex}>
-        <Checkbox defaultChecked={complete} />
+        <Checkbox onClick={() => updateTodo(id)} defaultChecked={complete} />
         <div style={complete ? styles.complete : {}}>
           <Header as="h3">{name}</Header>
         </div>
       </div>
-      <Button>Delete</Button>
+      <Button onClick={() => deleteTodo(id)} color="red">
+        Delete
+      </Button>
     </div>
   );
 };

@@ -7,8 +7,8 @@ import axios from "axios";
 import TodoForm from "./TodoForm";
 
 const dummyData = [
-  { name: "tood1", complete: true },
-  { name: "todo2", complete: false },
+  { id: 1, name: "tood1", complete: true },
+  { id: 2, name: "todo2", complete: false },
 ];
 
 function App() {
@@ -43,13 +43,37 @@ function App() {
       console.log(err);
     }
   };
+  const deleteTodo = async (id) => {
+    try {
+      let res = await axios.delete(`/api/items/${id}`);
+    } catch (err) {
+      // without backend
+      let newTodos = todos.filter((t) => t.id !== id);
+      setTodos(newTodos);
+    }
+  };
+  const updateTodo = async (id) => {
+    try {
+      let res = await axios.put(`/api/items/${id}`);
+    } catch (err) {
+      let newTodos = todos.map((t) =>
+        t.id !== id ? t : { ...t, complete: !t.complete }
+      );
+
+      setTodos(newTodos);
+    }
+  };
   const renderTodoList = () => {
     if (loading) return <p>loading</p>;
     if (error) return <p>error</p>;
     return (
       <>
         <TodoForm addTodo={addTodo} />
-        <TodoList todos={todos} />
+        <TodoList
+          updateTodo={updateTodo}
+          deleteTodo={deleteTodo}
+          todos={todos}
+        />
       </>
     );
   };
