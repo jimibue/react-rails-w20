@@ -22,45 +22,49 @@ function App() {
 
   const getTodos = async () => {
     try {
-      let res = await axios.get("/api/items");
-      setTodos(res.data); // need to look at res to double check
+      // gets from database
+      let res = await axios.get("/api/items?sort=name");
+      // updates UI
+      setTodos(res.data);
     } catch (err) {
-      // setError(true);
-      setTodos(dummyData); // TODO fix when api setup
-      console.log("err");
+      setError(true);
+      console.log(err);
     } finally {
       setLoading(false);
     }
   };
   const addTodo = async (todo) => {
     try {
-      let res = await axios.post("/api/items", { todo: todo });
-      // lets pretend res.data is our new item
+      // adds to database
+      let res = await axios.post("/api/items", todo);
+      // updates UI
       setTodos([...todos, res.data]);
-      console.log(res);
     } catch (err) {
-      setTodos([...todos, { ...todo, id: Math.random(), complete: false }]);
       console.log(err);
     }
   };
   const deleteTodo = async (id) => {
     try {
+      // removes from database
       let res = await axios.delete(`/api/items/${id}`);
-    } catch (err) {
-      // without backend
+      // removes from UI
+      //could also use res.data.id instaed of id, both work
       let newTodos = todos.filter((t) => t.id !== id);
       setTodos(newTodos);
+    } catch (err) {
+      console.log(err);
     }
   };
   const updateTodo = async (id) => {
     try {
       let res = await axios.put(`/api/items/${id}`);
-    } catch (err) {
       let newTodos = todos.map((t) =>
         t.id !== id ? t : { ...t, complete: !t.complete }
       );
 
       setTodos(newTodos);
+    } catch (err) {
+      console.log(err);
     }
   };
   const renderTodoList = () => {

@@ -1,6 +1,10 @@
 class Api::ItemsController < ApplicationController
   def index
-    render json: Item.all
+    if (params[:sort])
+      render json: Item.all.order(params[:sort])
+    else
+      render json: Item.all
+    end
   end
 
   def create
@@ -21,7 +25,7 @@ class Api::ItemsController < ApplicationController
     # end
 
     item = Item.find(params[:id])
-    item.update(complete: !complete)
+    item.update(complete: !item.complete)
     render json: item
   end
 
