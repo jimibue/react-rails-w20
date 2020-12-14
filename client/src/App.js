@@ -23,7 +23,7 @@ function App() {
   const getTodos = async () => {
     try {
       // gets from database
-      let res = await axios.get("/api/items?sort=name");
+      let res = await axios.get("/api/items?sort=name&yo=yoyo&test=x");
       // updates UI
       setTodos(res.data);
     } catch (err) {
